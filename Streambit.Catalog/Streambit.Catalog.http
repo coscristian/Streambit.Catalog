@@ -1,0 +1,6 @@
+@Streambit.Catalog_HostAddress = http://localhost:5039
+
+GET {{Streambit.Catalog_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
