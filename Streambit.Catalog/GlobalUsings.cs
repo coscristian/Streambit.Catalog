@@ -1,0 +1,1 @@
+﻿global using Streambit.Catalog.Api.Extensions;

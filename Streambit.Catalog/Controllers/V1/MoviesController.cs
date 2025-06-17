@@ -1,6 +1,5 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
-using Streambit.Catalog.Domain.Models;
 
 namespace Streambit.Catalog.Api.Controllers.V1
 {
@@ -13,7 +12,7 @@ namespace Streambit.Catalog.Api.Controllers.V1
         [Route("{id}")]
         public IActionResult GetById(int id)
         {
-            var movie = new Movie { Id = id, Title = "Pirates of the Caribean" };
+            var movie = new { Id = id, Title = "Pirates of the Caribean" };
             return Ok(movie);
         }
     }
