@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Streambit.Catalog.Domain.Aggregates.GenreAggregate;
+﻿using Streambit.Catalog.Domain.Aggregates.GenreAggregate;
 using Streambit.Catalog.Domain.Aggregates.LanguageAggregate;
 
 namespace Streambit.Catalog.Domain.Aggregates.MovieAggregate
@@ -93,13 +88,199 @@ namespace Streambit.Catalog.Domain.Aggregates.MovieAggregate
             if (newOriginalTitle == OriginalTitle)
                 return;
 
-            Title = newOriginalTitle;
+            OriginalTitle = newOriginalTitle;
+            LastModified = DateTime.UtcNow;
+        }
+
+        public void UpdateOriginalLanguage(Language newOriginalLanguage)
+        {
+            if (newOriginalLanguage is null)
+            {
+                throw new ArgumentNullException(nameof(newOriginalLanguage), "Language cannot be null.");
+            }
+
+            if (OriginalLanguage.LanguageId == newOriginalLanguage.LanguageId)
+            {
+                return;
+            }
+
+            OriginalLanguage = newOriginalLanguage;
+            LastModified = DateTime.UtcNow;                        
+        }
+
+        public void UpdateOverview(string newOverview)
+        {
+            if (newOverview is null)
+            {
+                throw new ArgumentNullException(nameof(newOverview), "Overview cannot be null.");
+            }
+
+            if (string.Equals(Overview, newOverview))
+            {
+                return;
+            }
+
+            Overview = newOverview;
+            LastModified = DateTime.UtcNow;
+        }
+
+        public void UpdatePopularity(decimal newPopularity)
+        {
+            if (newPopularity < 0)
+            {
+                throw new ArgumentNullException(nameof(newPopularity), "Popularity cannot be negative.");
+            }
+
+            if (newPopularity == Popularity)
+            {
+                return;
+            }
+            
+            Popularity = newPopularity;
+            LastModified = DateTime.UtcNow;
+        }
+
+        public void UpdateStatus(MovieStatus newStatus)
+        {
+            if (newStatus == Status)
+            {
+                return;
+            }
+            
+            Status = newStatus;
+            LastModified = DateTime.UtcNow;
+        }
+
+        public void UpdateReleaseDate(DateTime newReleaseDate)
+        {
+            if (newReleaseDate == ReleaseDate)
+            {
+                return;
+            }
+            
+            ReleaseDate = newReleaseDate;
+            LastModified = DateTime.UtcNow;
+        }
+
+        public void UpdateRevenue(int newRevenue)
+        {
+            if (newRevenue < 0)
+            {
+                throw new ArgumentNullException(nameof(newRevenue), "Revenue cannot be negative.");
+            }
+            
+            Revenue = newRevenue;
+            LastModified = DateTime.UtcNow;
+        }
+
+        public void UpdateRuntime(int newRuntime)
+        {
+            if (newRuntime < 0)
+            {
+                throw new ArgumentNullException(nameof(newRuntime), "Runtime cannot be negative.");
+            }
+            
+            Runtime = newRuntime;
+            LastModified = DateTime.UtcNow;
+        }
+        
+        public void UpdateTagLine(string newTagLine)
+        {
+            if (newTagLine == TagLine)
+            {
+                return;
+            }
+        
+            TagLine = newTagLine;
+            LastModified = DateTime.UtcNow;
+        }
+
+        public void UpdateHasVideo(bool hasVideo)
+        {
+            if (HasVideo == hasVideo)
+            {
+                return;
+            }
+            
+            HasVideo = hasVideo;
+            LastModified = DateTime.UtcNow;
+        }
+
+        public void UpdateVoteAverage(decimal newVoteAverage)
+        {
+            if (newVoteAverage < 0 || newVoteAverage > 10)
+            {
+                throw new ArgumentException("Vote average must be between 0 and 10.", nameof(newVoteAverage));
+            }
+
+            if (newVoteAverage == VoteAverage)
+            {
+                return;
+            }
+            
+            VoteAverage = newVoteAverage;
+            LastModified = DateTime.UtcNow;
+        }
+
+        public void UpdateVoteCount(int newVoteCount)
+        {
+            if (newVoteCount < 0)
+            {
+                throw new ArgumentException("Vote count cannot be negative.", nameof(newVoteCount));
+            }
+
+            if (newVoteCount == VoteCount)
+            {
+                return;
+            }
+            
+            VoteCount = newVoteCount;
+            LastModified = DateTime.UtcNow;
+        }
+
+        public void UpdateIsAdult(bool isAdult)
+        {
+            if (IsAdult == isAdult)
+            {
+                return;
+            }
+            
+            IsAdult = isAdult;
+            LastModified = DateTime.UtcNow;
+        }
+        
+        public void UpdateBudget(decimal newBudget)
+        {
+            if (newBudget < 0)
+                throw new ArgumentException("Budget cannot be negative.", nameof(newBudget));
+
+            if (newBudget == Budget)
+            {
+                return;
+            }
+            
+            Budget = newBudget;
             LastModified = DateTime.UtcNow;
         }
 
         public void AddGenre(Genre genre)
         {
+            ArgumentNullException.ThrowIfNull(genre, nameof(genre));
+            
+            if (_genres.Any(g => g.GenreId == genre.GenreId))
+                return; 
+
             _genres.Add(genre);
+            LastModified = DateTime.UtcNow;
+        }
+
+        public void RemoveGenre(Guid genreId)
+        {
+            var genre = _genres.FirstOrDefault(g => g.GenreId == genreId);
+            if (genre is null) return;
+
+            _genres.Remove(genre);
+            LastModified = DateTime.UtcNow;
         }
     }
 }
