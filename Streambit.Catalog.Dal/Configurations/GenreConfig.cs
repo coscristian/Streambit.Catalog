@@ -4,7 +4,7 @@ using Streambit.Catalog.Domain.Aggregates.GenreAggregate;
 
 namespace Streambit.Catalog.Dal.Configurations;
 
-public class GenreConfig : IEntityTypeConfiguration<Genre>
+internal class GenreConfig : IEntityTypeConfiguration<Genre>
 {
     public void Configure(EntityTypeBuilder<Genre> builder)
     {

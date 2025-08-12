@@ -4,7 +4,7 @@ using Streambit.Catalog.Domain.Aggregates.MovieAggregate;
 
 namespace Streambit.Catalog.Dal.Configurations;
 
-public class MovieConfig : IEntityTypeConfiguration<Movie>
+internal class MovieConfig : IEntityTypeConfiguration<Movie>
 {
     public void Configure(EntityTypeBuilder<Movie> builder)
     {
