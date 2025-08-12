@@ -7,7 +7,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="15.0.1" />
+    <PackageReference Include="MediatR" Version="13.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Genres\CommandHandlers\" />
+    <Folder Include="Genres\Commands\" />
+    <Folder Include="Genres\Queries\" />
+    <Folder Include="Genres\QueryHandlers\" />
+    <Folder Include="Languages\Queries\" />
+    <Folder Include="Languages\QueryHandlers\" />
+    <Folder Include="Movies\CommandHandlers\" />
+    <Folder Include="Movies\Commands\" />
+    <Folder Include="Movies\Queries\" />
+    <Folder Include="Movies\QueryHandlers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Streambit.Catalog.Dal\Streambit.Catalog.Dal.csproj" />
+    <ProjectReference Include="..\Streambit.Catalog.Domain\Streambit.Catalog.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Streambit.Catalog.Dal.Configurations;
 
-public class IdentityUserTokenConfig : IEntityTypeConfiguration<IdentityUserToken<string>>
+internal class IdentityUserTokenConfig : IEntityTypeConfiguration<IdentityUserToken<string>>
 {
     public void Configure(EntityTypeBuilder<IdentityUserToken<string>> builder)
     {

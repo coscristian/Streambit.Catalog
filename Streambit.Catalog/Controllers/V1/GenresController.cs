@@ -1,4 +1,4 @@
-﻿using Asp.Versioning;
+using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,17 +7,17 @@ namespace Streambit.Catalog.Api.Controllers.V1
     [ApiVersion("1.0")]
     [Route(ApiRoutes.BaseRoute)]
     [ApiController]
-    public class MoviesController : Controller
+    public class GenresController : Controller
     {
         private readonly IMediator _mediator;
 
-        public MoviesController(IMediator mediator)
+        public GenresController(IMediator mediator)
         {
             _mediator = mediator;
         }
-        
+
         [HttpGet]
-        public async Task<IActionResult> GetAllMovies()
+        public async Task<IActionResult> GetAllGenres()
         {
             return (IActionResult)Task.FromResult(Ok());
         }
