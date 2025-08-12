@@ -7,12 +7,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Contracts\Genres\Requests\" />
+    <Folder Include="Contracts\Genres\Responses\" />
+    <Folder Include="Contracts\Languages\Responses\" />
+    <Folder Include="Contracts\Movies\Requests\" />
+    <Folder Include="Contracts\Movies\Responses\" />
     <Folder Include="docs\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
+    <PackageReference Include="AutoMapper" Version="15.0.1" />
+    <PackageReference Include="MediatR" Version="13.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.6" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="9.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="9.0.1" />
@@ -20,6 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Streambit.Catalog.Application\Streambit.Catalog.Application.csproj" />
+    <ProjectReference Include="..\Streambit.Catalog.Dal\Streambit.Catalog.Dal.csproj" />
     <ProjectReference Include="..\Streambit.Catalog.Domain\Streambit.Catalog.Domain.csproj" />
   </ItemGroup>
 
