@@ -3,7 +3,9 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Streambit.Catalog.Application.Languages.Commands;
+using Streambit.Catalog.Application.Languages.Queries;
 using Streambit.Catalog.Contracts.Languages.Requests;
+using Streambit.Catalog.Contracts.Languages.Responses;
 
 namespace Streambit.Catalog.Api.Controllers.V1
 {
@@ -14,7 +16,6 @@ namespace Streambit.Catalog.Api.Controllers.V1
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-
         public LanguagesController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
@@ -22,16 +23,23 @@ namespace Streambit.Catalog.Api.Controllers.V1
         }
 
         [HttpGet]
-        public IActionResult GetAllLanguages()
+        public async Task<IActionResult> GetAllLanguages()
         {
-            return (IActionResult)Task.FromResult(Ok());
+            var query = new GetAllLanguagesQuery();
+            var response =  await _mediator.Send(query);
+            var languages = _mapper.Map<List<LanguageResponse>>(response);
+            return Ok(languages);
         }
         
         [HttpGet]
         [Route(ApiRoutes.Languages.GetById)]
-        public IActionResult GetLanguageById()
+        public async Task<IActionResult> GetLanguageById(string id)
         {
-            return (IActionResult)Task.FromResult(Ok());
+            var query = new GetLanguageById() { LanguageId = Guid.Parse(id) };
+            
+            var response =  await _mediator.Send(query);
+            var language = _mapper.Map<LanguageResponse>(response);
+            return Ok(language);
         }
 
         [HttpPost]
