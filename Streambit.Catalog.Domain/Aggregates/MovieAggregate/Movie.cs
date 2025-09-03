@@ -1,4 +1,6 @@
-﻿using Streambit.Catalog.Domain.Aggregates.GenreAggregate;
+﻿using Streambit.Catalog.Domain.Aggregates.CompanyAggregate;
+using Streambit.Catalog.Domain.Aggregates.CountryAggregate;
+using Streambit.Catalog.Domain.Aggregates.GenreAggregate;
 using Streambit.Catalog.Domain.Aggregates.LanguageAggregate;
 
 namespace Streambit.Catalog.Domain.Aggregates.MovieAggregate
@@ -7,22 +9,15 @@ namespace Streambit.Catalog.Domain.Aggregates.MovieAggregate
     {
         public Guid MovieId { get; private set; }
         public string Title { get; private set; }
-        public Language OriginalLanguage { get; private set; }
         public string OriginalTitle { get; private set; }
         public string Overview { get; private set; }
         public decimal Popularity { get; private set; }
-
+        public Language OriginalLanguage { get; private set; }
+        
+        public Country OriginCountry { get; private set; }
+        
         private readonly List<Genre> _genres = [];
-        public IEnumerable<Genre> Genres { get; private set; }
-        /* Entities to create
-        public IEnumerable<Companie> ProductionCompanies { get; private set; }
-
-        public IEnumerable<Countrie> ProductionCountries {get; private set; }
-
-        public IEnumerable<Language> SpokenLanguages {get; private set; }
-
-        */
-
+        
         // To Check
         public MovieStatus Status { get; private set; }
         public DateTime ReleaseDate { get; private set; }
@@ -37,6 +32,16 @@ namespace Streambit.Catalog.Domain.Aggregates.MovieAggregate
         public decimal Budget { get; private set; }
         public DateTime CreatedDate { get; private set; }
         public DateTime LastModified { get; private set; }
+        
+        public IEnumerable<Genre> Genres { get; private set; }
+        
+        public int ProductionCompanyId { get; private set; }
+        
+        public IEnumerable<ProductionCompany> ProductionCompanies { get; private set; }
+        
+        public IEnumerable<Country> ProductionCountries { get; private set; }
+        
+        public IEnumerable<Language> SpokenLanguages { get; private set; }
 
         // Factories
         public static Movie CreateMovie(string title, Language originalLanguage,
