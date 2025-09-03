@@ -13,8 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Genres\CommandHandlers\" />
-    <Folder Include="Genres\Commands\" />
+    <Folder Include="Genres\CommandHandlders\" />
     <Folder Include="Genres\Queries\" />
     <Folder Include="Genres\QueryHandlers\" />
     <Folder Include="Languages\QueryHandlers\" />
