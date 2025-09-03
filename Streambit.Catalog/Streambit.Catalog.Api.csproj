@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\Genres\Requests\" />
     <Folder Include="Contracts\Genres\Responses\" />
     <Folder Include="Contracts\Movies\Requests\" />
     <Folder Include="Contracts\Movies\Responses\" />
