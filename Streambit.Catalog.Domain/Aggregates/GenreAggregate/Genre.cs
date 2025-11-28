@@ -1,4 +1,5 @@
 ﻿using System;
+using Streambit.Catalog.Domain.Aggregates.MovieAggregate;
 
 namespace Streambit.Catalog.Domain.Aggregates.GenreAggregate
 {
@@ -8,7 +9,7 @@ namespace Streambit.Catalog.Domain.Aggregates.GenreAggregate
         public string Name { get; private set; }
         public DateTime CreatedDate { get; private set; }
         public DateTime LastModified { get; private set; }
-
+        
         private Genre() { }
 
         private Genre(Guid id, string name)

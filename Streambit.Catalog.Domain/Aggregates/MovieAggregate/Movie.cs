@@ -7,16 +7,27 @@ namespace Streambit.Catalog.Domain.Aggregates.MovieAggregate
 {
     public class Movie
     {
+        
+        // Fields
+        private readonly List<MovieGenre> _movieGenres = []; 
+        public IEnumerable<MovieGenre> MovieGenres { get { return _movieGenres; } }
+
         public Guid MovieId { get; private set; }
         public string Title { get; private set; }
         public string OriginalTitle { get; private set; }
         public string Overview { get; private set; }
         public decimal Popularity { get; private set; }
-        public Language OriginalLanguage { get; private set; }
         
-        public Country OriginCountry { get; private set; }
+        public Guid OriginalLanguageId { get; private set; }
+        public virtual Language OriginalLanguage { get; private set; }
         
-        private readonly List<Genre> _genres = [];
+        public Guid OriginCountryId { get; private set; }
+        public virtual Country OriginCountry { get; private set; }
+        
+        //public IEnumerable<Genre> Genres { get { return _genres; } }
+        //public virtual IReadOnlyCollection<Genre> Genres => _genres.AsReadOnly();
+        
+        public ICollection<ProductionCompany> ProductionCompanies { get; private set; }
         
         // To Check
         public MovieStatus Status { get; private set; }
@@ -28,16 +39,11 @@ namespace Streambit.Catalog.Domain.Aggregates.MovieAggregate
         public decimal VoteAverage { get; private set; }
         public int VoteCount { get; private set; }
         public bool IsAdult { get; private set; }
-        public string BackdroPath { get; private set; }
+        public string BackdropPath { get; private set; }
         public decimal Budget { get; private set; }
         public DateTime CreatedDate { get; private set; }
         public DateTime LastModified { get; private set; }
         
-        public IEnumerable<Genre> Genres { get; private set; }
-        
-        public int ProductionCompanyId { get; private set; }
-        
-        public IEnumerable<ProductionCompany> ProductionCompanies { get; private set; }
         
         public IEnumerable<Country> ProductionCountries { get; private set; }
         
@@ -66,7 +72,7 @@ namespace Streambit.Catalog.Domain.Aggregates.MovieAggregate
                 VoteAverage = voteAverage,
                 VoteCount = voteCount,
                 IsAdult = isAdult,
-                BackdroPath = backdropPath,
+                BackdropPath = backdropPath,
                 Budget = budget,
                 CreatedDate = DateTime.UtcNow,
                 LastModified = DateTime.UtcNow,
@@ -272,19 +278,21 @@ namespace Streambit.Catalog.Domain.Aggregates.MovieAggregate
         {
             ArgumentNullException.ThrowIfNull(genre, nameof(genre));
             
-            if (_genres.Any(g => g.GenreId == genre.GenreId))
+            if (_movieGenres.Any(g => g.GenreId == genre.GenreId))
                 return; 
-
-            _genres.Add(genre);
+            
+            var movieGenre = MovieGenre.Create(MovieId, genre.GenreId);
+            _movieGenres.Add(movieGenre);
+            
             LastModified = DateTime.UtcNow;
         }
 
         public void RemoveGenre(Guid genreId)
         {
-            var genre = _genres.FirstOrDefault(g => g.GenreId == genreId);
+            var genre = _movieGenres.FirstOrDefault(g => g.GenreId == genreId);
             if (genre is null) return;
 
-            _genres.Remove(genre);
+            _movieGenres.Remove(genre);
             LastModified = DateTime.UtcNow;
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace Streambit.Catalog.Domain.Aggregates.LanguageAggregate
+﻿using Streambit.Catalog.Domain.Aggregates.MovieAggregate;
+
+namespace Streambit.Catalog.Domain.Aggregates.LanguageAggregate
 {
     public class Language
     {
@@ -8,6 +10,8 @@
         public string Iso6391 { get; private set; }
         public DateTime CreatedDate { get; private set; }
         public DateTime LastModified { get; private set; }
+        
+        public virtual ICollection<Movie> Movies { get; private set; }
         
         private Language() { }
 
