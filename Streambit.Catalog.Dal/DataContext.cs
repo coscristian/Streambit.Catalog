@@ -1,3 +1,4 @@
+using Catalog.Infrastucture.Context.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Streambit.Catalog.Dal.Configurations;

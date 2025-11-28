@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Streambit.Catalog.Domain.Aggregates.GenreAggregate;
 
-namespace Streambit.Catalog.Dal.Configurations;
+namespace Catalog.Infrastucture.Context.Configurations;
 
 internal class GenreConfig : IEntityTypeConfiguration<Genre>
 {

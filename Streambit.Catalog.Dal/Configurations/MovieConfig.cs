@@ -14,8 +14,6 @@ internal class MovieConfig : IEntityTypeConfiguration<Movie>
         builder.Property(m =>  m.Overview).IsRequired();
         builder.Property(m =>  m.Popularity).IsRequired();
         
-        
-        
         // Referencias
         
     }
