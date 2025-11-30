@@ -393,7 +393,7 @@ Edit `Streambit.Catalog/appsettings.json`:
 
 **PostgreSQL Connection String Format:**
 ```
-Server=<hostname>;Port=<port>;Database=<database_name>;User Id=<username>;Password=<password>;
+
 ```
 
 #### 3️⃣ Restore NuGet Dependencies
