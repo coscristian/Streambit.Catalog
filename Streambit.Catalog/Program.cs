@@ -1,6 +1,4 @@
-using Streambit.Catalog.Api.Extensions;
-
-namespace Streambit.Catalog
+namespace Streambit.Catalog.Api
 {
     public class Program
     {

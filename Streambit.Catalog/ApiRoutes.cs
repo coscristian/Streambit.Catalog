@@ -1,4 +1,4 @@
-namespace Streambit.Catalog;
+namespace Streambit.Catalog.Api;
 
 public class ApiRoutes
 {
