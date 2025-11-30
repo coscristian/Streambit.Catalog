@@ -4,18 +4,16 @@ namespace Streambit.Catalog.Domain.Aggregates.MovieAggregate
 {
     public class MovieGenre
     {
-        public Guid MovieGenreId { get; private set; }
-        public Guid MovieId { get; private set; }
-        public Guid GenreId { get; private set; }
+        public int MovieId { get; set; }
+        public Movie Movie { get; set; }
         
-        // Navigation properties
-        public Movie Movie { get; private set; }
-        public Genre Genre { get; private set; }
+        public int GenreId { get; set; }
+        public Genre Genre { get; set; }
 
-        public static MovieGenre Create(Guid movieId, Guid genreId)
+        public static MovieGenre Create(int movieId, int genreId)
         {
-            if (movieId == Guid.Empty) throw new ArgumentException("MovieId cannot be empty.", nameof(movieId));
-            if (genreId == Guid.Empty) throw new ArgumentException("GenreId cannot be empty.", nameof(genreId));
+            if (movieId <= 0) throw new ArgumentException("MovieId cannot be empty.", nameof(movieId));
+            if (genreId <= 0) throw new ArgumentException("GenreId cannot be empty.", nameof(genreId));
 
             return new MovieGenre
             {
