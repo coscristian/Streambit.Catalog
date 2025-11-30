@@ -1,0 +1,118 @@
+@startuml
+
+
+title Movie Catalog Domain Model (Aggregate Root: Movie)
+
+'===========================================
+'                CLASSES
+'===========================================
+
+class Movie {
+    +int Id
+    +string Title
+    +string OriginalTitle
+    +string OriginalLanguage
+    +DateTime? ReleaseDate
+    +string Overview
+    +bool IsAdult
+    +decimal Popularity
+    +string? BackdropPath
+    +decimal Budget
+    +int Runtime
+    +string? TagLine
+    +decimal VoteAverage
+    +int VoteCount
+    +DateTime CreatedDate
+    +DateTime LastModified
+    --
+    +AddGenre(Genre)
+    +RemoveGenre(Genre)
+    +AddProvider(Provider)
+    +AddImage(MovieImage)
+}
+
+class Genre {
+    +int Id
+    +string Name
+}
+
+class MovieGenre {
+    +int MovieId
+    +int GenreId
+}
+
+class Provider {
+    +int Id
+    +string Name
+    +ProviderCode Code
+    +ProviderType Type
+    +string? ApiBaseUrl
+    +string? WebBaseUrl
+    +bool SupportsRatings
+    +bool SupportsImages
+    +bool SupportsCast
+    +bool SupportsKeywords
+}
+
+class MovieProvider {
+    +int MovieId
+    +int ProviderId
+    +string ExternalId
+}
+
+class MovieImage {
+    +int Id
+    +string Path
+    +ImageType Type
+    +int Width
+    +int Height
+    +int MovieId
+    +int ProviderId
+}
+
+'===========================================
+'                ENUMS
+'===========================================
+
+enum ProviderCode {
+    Tmdb
+    Imdb
+    Rt
+    Jw
+    Trakt
+}
+
+enum ProviderType {
+    Movies
+    Tv
+    Mixed
+}
+
+enum ImageType {
+    Poster
+    Backdrop
+}
+
+'===========================================
+'            RELATIONSHIPS
+'===========================================
+
+' Movie <-> MovieGenre (1 - many)
+Movie "1" -- "0..*" MovieGenre : has >
+
+' Genre <-> MovieGenre (1 - many)
+Genre "1" -- "0..*" MovieGenre : categorized >
+
+' Movie <-> MovieProvider
+Movie "1" -- "0..*" MovieProvider : provided by >
+
+' Provider <-> MovieProvider
+Provider "1" -- "0..*" MovieProvider
+
+' Movie <-> MovieImage
+Movie "1" -- "0..*" MovieImage : has images >
+
+' Provider <-> MovieImage
+Provider "1" -- "0..*" MovieImage
+
+@enduml

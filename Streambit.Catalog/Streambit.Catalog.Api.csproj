@@ -10,7 +10,6 @@
     <Folder Include="Contracts\Genres\Responses\" />
     <Folder Include="Contracts\Movies\Requests\" />
     <Folder Include="Contracts\Movies\Responses\" />
-    <Folder Include="docs\" />
   </ItemGroup>
 
   <ItemGroup>
