@@ -1,5 +1,8 @@
 ﻿
+using System.Reflection;
 using Asp.Versioning;
+using Streambit.Catalog.Application;
+using Streambit.Catalog.Application.Languages.CommandHandlers;
 
 namespace Streambit.Catalog.Api.Registrars
 {
@@ -22,6 +25,9 @@ namespace Streambit.Catalog.Api.Registrars
             });
 
             builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddAutoMapper(cfg => { }, typeof(AssemblyMarker));
+            builder.Services.AddMediatR(cfg => 
+                cfg.RegisterServicesFromAssembly(typeof(AssemblyMarker).Assembly));
         }
     }
 }
