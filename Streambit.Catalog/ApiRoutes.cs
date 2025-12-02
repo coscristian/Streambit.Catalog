@@ -12,7 +12,7 @@ public class ApiRoutes
     public class Languages
     {
         public const string GetById = "{id}";
-        public const string CreateLanguage = "CreateLanguage";
+        public const string CreateLanguages = "CreateLanguages";
     }
 
     public class Genres

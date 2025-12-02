@@ -11,8 +11,6 @@ namespace Streambit.Catalog.Domain.Aggregates.LanguageAggregate
         public DateTime CreatedDate { get; private set; }
         public DateTime LastModified { get; private set; }
         
-        public virtual ICollection<Movie> Movies { get; private set; }
-        
         private Language() { }
 
         // Factory Method

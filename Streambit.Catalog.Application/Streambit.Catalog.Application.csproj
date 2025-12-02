@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Streambit.Catalog.Contracts\Streambit.Catalog.Contracts.csproj" />
     <ProjectReference Include="..\Streambit.Catalog.Dal\Streambit.Catalog.Dal.csproj" />
     <ProjectReference Include="..\Streambit.Catalog.Domain\Streambit.Catalog.Domain.csproj" />
   </ItemGroup>
