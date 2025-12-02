@@ -5,5 +5,5 @@ namespace Streambit.Catalog.Application.Languages.Queries;
 
 public class GetLanguageById : IRequest<Language>
 {
-    public Guid LanguageId { get; set; }
+    public int LanguageId { get; set; }
 }

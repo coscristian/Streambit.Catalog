@@ -11,6 +11,9 @@ public class ProviderConfig : IEntityTypeConfiguration<Provider>
         builder.ToTable("Providers");
         builder.HasKey(p => p.Id);
 
+        builder.Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+
         builder.Property(p => p.Name)
             .IsRequired()
             .HasMaxLength(200);
