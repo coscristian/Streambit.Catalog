@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Streambit.Catalog.Dal", "St
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Streambit.Catalog.Domain", "Streambit.Catalog.Domain\Streambit.Catalog.Domain.csproj", "{C7E141D9-76F1-48AE-8CC8-C53F419C53FF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Streambit.Catalog.Contracts", "Streambit.Catalog.Contracts\Streambit.Catalog.Contracts.csproj", "{9B63956F-C6EF-4871-9F3D-931811ADD04C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{C7E141D9-76F1-48AE-8CC8-C53F419C53FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7E141D9-76F1-48AE-8CC8-C53F419C53FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7E141D9-76F1-48AE-8CC8-C53F419C53FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B63956F-C6EF-4871-9F3D-931811ADD04C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B63956F-C6EF-4871-9F3D-931811ADD04C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B63956F-C6EF-4871-9F3D-931811ADD04C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B63956F-C6EF-4871-9F3D-931811ADD04C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

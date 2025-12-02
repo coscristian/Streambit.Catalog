@@ -5,7 +5,7 @@ using Streambit.Catalog.Domain.Aggregates.LanguageAggregate;
 
 namespace Streambit.Catalog.Application.Languages.CommandHandlers;
 
-public class CreateLanguageCommandHandler : IRequestHandler<CreateLanguageCommand, Language>
+public class CreateLanguageCommandHandler : IRequestHandler<CreateLanguagesCommand, List<Language>>
 {
     private readonly DataContext _context;
         
@@ -14,13 +14,16 @@ public class CreateLanguageCommandHandler : IRequestHandler<CreateLanguageComman
         _context = context;
     }
     
-    public async Task<Language> Handle(CreateLanguageCommand request, CancellationToken cancellationToken)
+    public async Task<List<Language>> Handle(CreateLanguagesCommand request, CancellationToken cancellationToken)
     {
-        var language = Language.CreateLanguage(request.Name, request.EnglishName, request.Iso6391);
+        // TODO: Avoid duplications
+        var newLanguages = request.Languages
+            .Select(newLang => Language.CreateLanguage(newLang.Name, newLang.EnglishName, newLang.Iso6391))
+            .ToList();
         
-        _context.Languages.Add(language);
+        await _context.Languages.AddRangeAsync(newLanguages, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
-        
-        return language;
+
+        return newLanguages;
     }
 }

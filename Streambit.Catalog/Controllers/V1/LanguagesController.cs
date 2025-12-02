@@ -4,7 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Streambit.Catalog.Application.Languages.Commands;
 using Streambit.Catalog.Application.Languages.Queries;
-using Streambit.Catalog.Contracts.Languages.Requests;
+using Streambit.Catalog.Contracts.Dto.Languages.Requests;
 using Streambit.Catalog.Contracts.Languages.Responses;
 
 namespace Streambit.Catalog.Api.Controllers.V1
@@ -43,12 +43,12 @@ namespace Streambit.Catalog.Api.Controllers.V1
         }
 
         [HttpPost]
-        [Route(ApiRoutes.Languages.CreateLanguage)]
-        public async Task<IActionResult> CreateLanguage([FromBody] LanguageCreate newLanguage)
+        [Route(ApiRoutes.Languages.CreateLanguages)]
+        public async Task<IActionResult> CreateLanguage([FromBody] List<LanguageCreate> newLanguages)
         {
-            var command = _mapper.Map<CreateLanguageCommand>(newLanguage);
+            var command = _mapper.Map<CreateLanguagesCommand>(newLanguages);
             var response = await _mediator.Send(command);
-            return CreatedAtAction(nameof(GetLanguageById), new { id = response.LanguageId, response });
+            return Created("", response );
         }
     }
 }
