@@ -11,6 +11,9 @@ public class MovieImageConfig : IEntityTypeConfiguration<MovieImage>
         builder.ToTable("MovieImages");
 
         builder.HasKey(mi => mi.Id);
+        
+        builder.Property(mi => mi.Id)
+            .ValueGeneratedOnAdd();
 
         builder.Property(mi => mi.Type)
             .HasConversion<string>()
