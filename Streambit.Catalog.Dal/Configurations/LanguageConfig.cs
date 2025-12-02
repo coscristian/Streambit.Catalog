@@ -8,6 +8,9 @@ internal class LanguageConfig : IEntityTypeConfiguration<Language>
 {
     public void Configure(EntityTypeBuilder<Language> builder)
     {
-        builder.HasKey(x => x.LanguageId);
+        builder.HasKey(l => l.LanguageId);
+        
+        builder.Property(l => l.LanguageId)
+            .ValueGeneratedOnAdd();
     }
 }

@@ -33,9 +33,9 @@ namespace Streambit.Catalog.Api.Controllers.V1
         
         [HttpGet]
         [Route(ApiRoutes.Languages.GetById)]
-        public async Task<IActionResult> GetLanguageById(string id)
+        public async Task<IActionResult> GetLanguageById(int id)
         {
-            var query = new GetLanguageById() { LanguageId = Guid.Parse(id) };
+            var query = new GetLanguageById() { LanguageId = id };
             
             var response =  await _mediator.Send(query);
             var language = _mapper.Map<LanguageResponse>(response);

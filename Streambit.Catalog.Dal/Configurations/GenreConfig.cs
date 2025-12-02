@@ -12,6 +12,8 @@ internal class GenreConfig : IEntityTypeConfiguration<Genre>
 
         builder.HasKey(g => g.Id);
 
+        builder.Property(g => g.Id)
+            .ValueGeneratedOnAdd();
         builder.Property(g => g.Name)
             .IsRequired()
             .HasMaxLength(200);

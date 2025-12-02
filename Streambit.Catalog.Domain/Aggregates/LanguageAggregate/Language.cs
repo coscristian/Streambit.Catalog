@@ -4,7 +4,7 @@ namespace Streambit.Catalog.Domain.Aggregates.LanguageAggregate
 {
     public class Language
     {
-        public Guid LanguageId { get; private set; }
+        public int LanguageId { get; private set; }
         public string Name { get; private set; }
         public string EnglishName { get; private set; }
         public string Iso6391 { get; private set; }
@@ -29,7 +29,6 @@ namespace Streambit.Catalog.Domain.Aggregates.LanguageAggregate
 
             return new Language
             {
-                LanguageId = Guid.NewGuid(),
                 Name = name,
                 EnglishName = englishName,
                 Iso6391 = iso6391.ToLowerInvariant(),
