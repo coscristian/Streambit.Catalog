@@ -16,11 +16,11 @@ namespace Streambit.Catalog.Domain.Aggregates.LanguageAggregate
         // Factory Method
         public static Language CreateLanguage(string name, string englishName, string iso6391)
         {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("Name cannot be empty.", nameof(name));
-
             if (string.IsNullOrWhiteSpace(englishName))
                 throw new ArgumentException("English name cannot be empty.", nameof(englishName));
+
+            if (string.IsNullOrWhiteSpace(name))
+                name = englishName;
 
             if (string.IsNullOrWhiteSpace(iso6391) || iso6391.Length != 2)
                 throw new ArgumentException("ISO 639-1 code must have exactly 2 letters.", nameof(iso6391));
