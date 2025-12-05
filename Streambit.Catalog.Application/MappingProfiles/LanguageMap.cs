@@ -10,7 +10,7 @@ public class LanguageMap : Profile
 {
     public LanguageMap()
     {
-        CreateMap<List<LanguageCreate>, CreateLanguagesCommand>()
+        CreateMap<List<LanguageCreateDto>, CreateLanguagesCommand>()
             .ForMember(dest => dest.Languages, opt => opt.MapFrom(src => src));
     }
 }

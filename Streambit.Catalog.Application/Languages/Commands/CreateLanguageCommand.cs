@@ -5,5 +5,5 @@ namespace Streambit.Catalog.Application.Languages.Commands;
 
 public class CreateLanguagesCommand : IRequest<List<Language>>
 {
-    public List<LanguageCreate> Languages { get; set; } = [];
+    public List<LanguageCreateDto> Languages { get; set; } = [];
 }

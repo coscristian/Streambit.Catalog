@@ -22,7 +22,6 @@ namespace Streambit.Catalog.Domain.Aggregates.GenreAggregate
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Genre name cannot be empty.", nameof(name));
 
-            // GenreId = id;
             Name = name;
             CreatedDate = DateTime.UtcNow;
             LastModified = DateTime.UtcNow;

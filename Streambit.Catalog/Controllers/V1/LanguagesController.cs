@@ -44,7 +44,7 @@ namespace Streambit.Catalog.Api.Controllers.V1
 
         [HttpPost]
         [Route(ApiRoutes.Languages.CreateLanguages)]
-        public async Task<IActionResult> CreateLanguage([FromBody] List<LanguageCreate> newLanguages)
+        public async Task<IActionResult> CreateLanguage([FromBody] List<LanguageCreateDto> newLanguages)
         {
             var command = _mapper.Map<CreateLanguagesCommand>(newLanguages);
             var response = await _mediator.Send(command);
