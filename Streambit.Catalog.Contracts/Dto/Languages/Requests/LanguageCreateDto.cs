@@ -1,6 +1,6 @@
 namespace Streambit.Catalog.Contracts.Dto.Languages.Requests;
 
-public class LanguageCreate
+public class LanguageCreateDto
 {
     public string Name { get; set; } = string.Empty;
     public string EnglishName { get; set; } = string.Empty;

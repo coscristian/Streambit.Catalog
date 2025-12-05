@@ -18,5 +18,6 @@ public class ApiRoutes
     public class Genres
     {
         public const string GetById = "{id}";
+        public const string Create = "create";
     }
 }
