@@ -8,5 +8,7 @@ public class TmdbOptions
 
     public string BaseUrl { get; set; } = "https://api.themoviedb.org/3";
 
+    public string ImageBaseUrl { get; set; } = "https://image.tmdb.org/t/p/w500";
+
     public string Language { get; set; } = "en-US";
 }

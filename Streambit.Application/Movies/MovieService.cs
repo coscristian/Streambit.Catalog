@@ -7,6 +7,9 @@ namespace Streambit.Application.Movies;
 
 public class MovieService : IMovieService
 {
+    public const int DefaultPageSize = 20;
+    public const int MaxPageSize = 100;
+
     private readonly IMovieRepository _movies;
     private readonly IGenreRepository _genres;
 
@@ -16,10 +19,25 @@ public class MovieService : IMovieService
         _genres = genres;
     }
 
-    public async Task<IReadOnlyList<MovieResponse>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<MoviePageResponse> GetPageAsync(int page, int pageSize, CancellationToken cancellationToken = default)
     {
-        var movies = await _movies.GetAllAsync(cancellationToken);
-        return movies.Select(Map).ToList();
+        if (page < 1)
+            throw new ArgumentException("Page must be at least 1.", nameof(page));
+
+        if (pageSize < 1 || pageSize > MaxPageSize)
+            throw new ArgumentException($"Page size must be between 1 and {MaxPageSize}.", nameof(pageSize));
+
+        var (movies, total) = await _movies.GetPageAsync(page, pageSize, cancellationToken);
+        var totalPages = total == 0 ? 0 : (int)Math.Ceiling(total / (double)pageSize);
+
+        return new MoviePageResponse
+        {
+            Page = page,
+            PageSize = pageSize,
+            TotalResults = total,
+            TotalPages = totalPages,
+            Results = movies.Select(Map).ToList()
+        };
     }
 
     public async Task<MovieResponse?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
@@ -128,6 +146,24 @@ public class MovieService : IMovieService
             Format = movie.Format.ToString(),
             Availability = movie.Availability.ToString(),
             IsFeatured = movie.IsFeatured,
+            OriginalTitle = movie.OriginalTitle,
+            OriginalLanguage = movie.OriginalLanguage,
+            ReleaseDate = movie.ReleaseDate,
+            Popularity = movie.Popularity,
+            VoteCount = movie.VoteCount,
+            Adult = movie.Adult,
+            Video = movie.Video,
+            PosterPath = movie.PosterPath,
+            BackdropPath = movie.BackdropPath,
+            ExternalIds = movie.MovieSources
+                .OrderBy(link => link.Source?.Name)
+                .Select(link => new MovieExternalIdResponse
+                {
+                    SourceId = link.SourceId,
+                    SourceName = link.Source?.Name ?? string.Empty,
+                    ExternalId = link.ExternalId
+                })
+                .ToList(),
             Genres = movie.MovieGenres
                 .Where(link => link.Genre is not null)
                 .Select(link => new GenreResponse

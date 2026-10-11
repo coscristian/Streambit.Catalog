@@ -19,6 +19,7 @@ public static class DependencyInjection
         services.AddScoped<IMovieRepository, MovieRepository>();
         services.AddScoped<ICreditRepository, CreditRepository>();
         services.AddScoped<ILanguageRepository, LanguageRepository>();
+        services.AddScoped<ISyncLogRepository, SyncLogRepository>();
 
         return services;
     }

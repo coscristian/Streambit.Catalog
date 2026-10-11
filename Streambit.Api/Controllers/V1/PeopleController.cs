@@ -1,6 +1,7 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Streambit.Application.People;
+using Streambit.Application.Sync;
 using Streambit.Contracts.People;
 
 namespace Streambit.Api.Controllers.V1;
@@ -11,10 +12,12 @@ namespace Streambit.Api.Controllers.V1;
 public class PeopleController : ControllerBase
 {
     private readonly IPersonService _people;
+    private readonly IPersonSyncService _sync;
 
-    public PeopleController(IPersonService people)
+    public PeopleController(IPersonService people, IPersonSyncService sync)
     {
         _people = people;
+        _sync = sync;
     }
 
     [HttpGet]
@@ -28,6 +31,12 @@ public class PeopleController : ControllerBase
     {
         var person = await _people.GetByIdAsync(id, cancellationToken);
         return person is null ? NotFound() : Ok(person);
+    }
+
+    [HttpPost(ApiRoutes.People.Sync)]
+    public async Task<ActionResult<PersonSyncResult>> Sync(CancellationToken cancellationToken)
+    {
+        return Ok(await _sync.SyncAsync(SyncTrigger.Manual, cancellationToken));
     }
 
     [HttpPost]

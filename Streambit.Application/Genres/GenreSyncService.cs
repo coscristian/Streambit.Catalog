@@ -1,4 +1,5 @@
 using Streambit.Application.Abstractions;
+using Streambit.Application.Sync;
 using Streambit.Domain.Aggregates.GenreAggregate;
 using Streambit.Domain.Aggregates.SourceAggregate;
 
@@ -12,16 +13,24 @@ public class GenreSyncService : IGenreSyncService
     private readonly ITmdbGenreClient _tmdb;
     private readonly IGenreRepository _genres;
     private readonly ISourceRepository _sources;
+    private readonly ISyncLogContext _syncLog;
 
-    public GenreSyncService(ITmdbGenreClient tmdb, IGenreRepository genres, ISourceRepository sources)
+    public GenreSyncService(
+        ITmdbGenreClient tmdb,
+        IGenreRepository genres,
+        ISourceRepository sources,
+        ISyncLogContext syncLog)
     {
         _tmdb = tmdb;
         _genres = genres;
         _sources = sources;
+        _syncLog = syncLog;
     }
 
-    public async Task<GenreSyncResult> SyncAsync(CancellationToken cancellationToken = default)
+    public async Task<GenreSyncResult> SyncAsync(string trigger, CancellationToken cancellationToken = default)
     {
+        _syncLog.Begin(SyncEntity.Genre, trigger);
+
         var created = 0;
         var linked = 0;
         var skipped = 0;

@@ -7,6 +7,7 @@ public class ApiRoutes
     public class Movies
     {
         public const string GetById = "{id}";
+        public const string Sync = "sync";
     }
 
     public class Genres
@@ -25,6 +26,7 @@ public class ApiRoutes
     public class People
     {
         public const string GetById = "{id}";
+        public const string Sync = "sync";
     }
 
     public class Credits

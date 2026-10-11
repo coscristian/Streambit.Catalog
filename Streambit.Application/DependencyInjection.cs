@@ -5,6 +5,7 @@ using Streambit.Application.Languages;
 using Streambit.Application.Movies;
 using Streambit.Application.People;
 using Streambit.Application.Sources;
+using Streambit.Application.Sync;
 
 namespace Streambit.Application;
 
@@ -18,6 +19,8 @@ public static class DependencyInjection
         services.AddScoped<IMovieService, MovieService>();
         services.AddScoped<ICreditService, CreditService>();
         services.AddScoped<ILanguageService, LanguageService>();
+        services.AddScoped<ISyncLogContext, SyncLogContext>();
+        services.AddScoped<ISyncLogService, SyncLogService>();
         return services;
     }
 }

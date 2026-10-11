@@ -32,6 +32,16 @@ public class GenreRepository : IGenreRepository
             cancellationToken);
     }
 
+    public async Task<IReadOnlyDictionary<string, int>> GetIdsByExternalIdAsync(int sourceId, CancellationToken cancellationToken = default)
+    {
+        var links = await _context.GenreSources
+            .Where(link => link.SourceId == sourceId)
+            .Select(link => new { link.ExternalId, link.GenreId })
+            .ToListAsync(cancellationToken);
+
+        return links.ToDictionary(link => link.ExternalId, link => link.GenreId, StringComparer.Ordinal);
+    }
+
     public Task<Genre?> GetByNameAsync(string name, CancellationToken cancellationToken = default)
     {
         var normalized = name.Trim().ToLower();

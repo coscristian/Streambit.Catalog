@@ -19,6 +19,28 @@ internal class PersonConfig : IEntityTypeConfiguration<Person>
             .IsRequired()
             .HasMaxLength(1000);
 
+        builder.Property(person => person.ProfilePath)
+            .IsRequired()
+            .HasMaxLength(1000)
+            .HasDefaultValue(string.Empty);
+
+        builder.Property(person => person.Adult)
+            .IsRequired()
+            .HasDefaultValue(false);
+
+        builder.Property(person => person.Gender)
+            .IsRequired()
+            .HasDefaultValue(0);
+
+        builder.Property(person => person.KnownForDepartment)
+            .IsRequired()
+            .HasMaxLength(100)
+            .HasDefaultValue(string.Empty);
+
+        builder.Property(person => person.Popularity)
+            .IsRequired()
+            .HasDefaultValue(0d);
+
         builder.Property(person => person.CreatedDate)
             .IsRequired();
 

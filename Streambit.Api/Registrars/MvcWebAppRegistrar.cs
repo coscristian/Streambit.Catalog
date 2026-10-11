@@ -5,6 +5,7 @@
         public void RegisterPipelineComponents(WebApplication app)
         {
             app.UseHttpsRedirection();
+            app.UseCors(MvcRegitrar.WebPolicy);
             app.UseAuthorization();
             app.MapControllers();
         }

@@ -1,5 +1,8 @@
 using Microsoft.Extensions.Options;
 using Streambit.Application.Genres;
+using Streambit.Application.Movies;
+using Streambit.Application.People;
+using Streambit.Application.Sync;
 
 namespace Streambit.Api.Tmdb;
 
@@ -27,23 +30,23 @@ public class GenreSyncHostedService : BackgroundService
         var sync = _syncOptions.Value;
         if (!sync.Enabled)
         {
-            _logger.LogInformation("Genre sync is disabled.");
+            _logger.LogInformation("TMDB sync is disabled.");
             return;
         }
 
         if (string.IsNullOrWhiteSpace(_tmdbOptions.Value.ApiKey))
         {
-            _logger.LogWarning("TMDB API key is missing. Genre sync is skipped.");
+            _logger.LogWarning("TMDB API key is missing. TMDB sync is skipped.");
             return;
         }
 
         if (sync.Interval <= TimeSpan.Zero)
         {
-            _logger.LogWarning("Genre sync interval must be greater than zero. Genre sync is skipped.");
+            _logger.LogWarning("TMDB sync interval must be greater than zero. TMDB sync is skipped.");
             return;
         }
 
-        _logger.LogInformation("Genre sync scheduled every {Interval}.", sync.Interval);
+        _logger.LogInformation("TMDB sync scheduled every {Interval}.", sync.Interval);
 
         using var timer = new PeriodicTimer(sync.Interval);
         while (await timer.WaitForNextTickAsync(stoppingToken))
@@ -52,11 +55,18 @@ public class GenreSyncHostedService : BackgroundService
 
     private async Task SyncOnceAsync(CancellationToken cancellationToken)
     {
+        await SyncGenresAsync(cancellationToken);
+        await SyncMoviesAsync(cancellationToken);
+        await SyncPeopleAsync(cancellationToken);
+    }
+
+    private async Task SyncGenresAsync(CancellationToken cancellationToken)
+    {
         try
         {
             await using var scope = _scopes.CreateAsyncScope();
             var sync = scope.ServiceProvider.GetRequiredService<IGenreSyncService>();
-            var result = await sync.SyncAsync(cancellationToken);
+            var result = await sync.SyncAsync(SyncTrigger.Scheduled, cancellationToken);
             _logger.LogInformation(
                 "Genre sync finished. Created {Created}, linked {Linked}, skipped {Skipped}.",
                 result.Created,
@@ -70,6 +80,50 @@ public class GenreSyncHostedService : BackgroundService
         catch (Exception exception)
         {
             _logger.LogError(exception, "Genre sync failed.");
+        }
+    }
+
+    private async Task SyncMoviesAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            await using var scope = _scopes.CreateAsyncScope();
+            var sync = scope.ServiceProvider.GetRequiredService<IMovieSyncService>();
+            var result = await sync.SyncAsync(SyncTrigger.Scheduled, cancellationToken);
+            _logger.LogInformation(
+                "Movie sync finished. Created {Created}, skipped {Skipped}.",
+                result.Created,
+                result.Skipped);
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "Movie sync failed.");
+        }
+    }
+
+    private async Task SyncPeopleAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            await using var scope = _scopes.CreateAsyncScope();
+            var sync = scope.ServiceProvider.GetRequiredService<IPersonSyncService>();
+            var result = await sync.SyncAsync(SyncTrigger.Scheduled, cancellationToken);
+            _logger.LogInformation(
+                "People sync finished. Created {Created}, skipped {Skipped}.",
+                result.Created,
+                result.Skipped);
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "People sync failed.");
         }
     }
 }

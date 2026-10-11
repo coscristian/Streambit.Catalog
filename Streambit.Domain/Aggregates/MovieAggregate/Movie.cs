@@ -13,11 +13,23 @@ public class Movie
     public ContentFormat Format { get; private set; }
     public Availability Availability { get; private set; }
     public bool IsFeatured { get; private set; }
+    public string OriginalTitle { get; private set; } = string.Empty;
+    public string OriginalLanguage { get; private set; } = string.Empty;
+    public string ReleaseDate { get; private set; } = string.Empty;
+    public double Popularity { get; private set; }
+    public int VoteCount { get; private set; }
+    public bool Adult { get; private set; }
+    public bool Video { get; private set; }
+    public string PosterPath { get; private set; } = string.Empty;
+    public string BackdropPath { get; private set; } = string.Empty;
     public DateTime CreatedDate { get; private set; }
     public DateTime LastModified { get; private set; }
 
     private readonly List<MovieGenre> _movieGenres = [];
     public IReadOnlyCollection<MovieGenre> MovieGenres => _movieGenres;
+
+    private readonly List<MovieSource> _movieSources = [];
+    public IReadOnlyCollection<MovieSource> MovieSources => _movieSources;
 
     private readonly List<Credit> _credits = [];
     public IReadOnlyCollection<Credit> Credits => _credits;
@@ -74,6 +86,83 @@ public class Movie
             CreatedDate = DateTime.UtcNow,
             LastModified = DateTime.UtcNow
         };
+    }
+
+    public static Movie Import(
+        string title,
+        string? originalTitle,
+        string? originalLanguage,
+        int year,
+        string? releaseDate,
+        string? overview,
+        decimal rating,
+        double popularity,
+        int voteCount,
+        bool adult,
+        bool video,
+        string? posterPath,
+        string? posterUrl,
+        string? backdropPath,
+        string? backdropUrl,
+        Availability availability)
+    {
+        if (string.IsNullOrWhiteSpace(title))
+            throw new ArgumentException("Title is required.", nameof(title));
+
+        if (year < 0)
+            throw new ArgumentException("Year cannot be negative.", nameof(year));
+
+        EnsureRating(rating);
+
+        if (double.IsNaN(popularity) || double.IsInfinity(popularity))
+            throw new ArgumentException("Popularity is invalid.", nameof(popularity));
+
+        if (voteCount < 0)
+            throw new ArgumentException("Vote count cannot be negative.", nameof(voteCount));
+
+        if (!Enum.IsDefined(availability))
+            throw new ArgumentException("Availability is not valid.", nameof(availability));
+
+        var overviewValue = overview?.Trim() ?? string.Empty;
+        if (overviewValue.Length > 5000)
+            overviewValue = overviewValue[..5000];
+
+        return new Movie
+        {
+            Title = title.Trim(),
+            OriginalTitle = originalTitle?.Trim() ?? string.Empty,
+            OriginalLanguage = originalLanguage?.Trim() ?? string.Empty,
+            Year = year,
+            ReleaseDate = releaseDate?.Trim() ?? string.Empty,
+            Overview = overviewValue,
+            RuntimeMinutes = 0,
+            Rating = rating,
+            Popularity = popularity,
+            VoteCount = voteCount,
+            Adult = adult,
+            Video = video,
+            PosterPath = posterPath?.Trim() ?? string.Empty,
+            PosterUrl = posterUrl?.Trim() ?? string.Empty,
+            BackdropPath = backdropPath?.Trim() ?? string.Empty,
+            BackdropUrl = backdropUrl?.Trim() ?? string.Empty,
+            Format = ContentFormat.Movie,
+            Availability = availability,
+            IsFeatured = false,
+            CreatedDate = DateTime.UtcNow,
+            LastModified = DateTime.UtcNow
+        };
+    }
+
+    public void AssignExternalId(int sourceId, string externalId)
+    {
+        var existing = _movieSources.FirstOrDefault(link => link.SourceId == sourceId);
+        if (existing is null)
+        {
+            _movieSources.Add(MovieSource.Create(sourceId, externalId));
+            return;
+        }
+
+        existing.ChangeExternalId(externalId);
     }
 
     public void UpdateTitle(string title)

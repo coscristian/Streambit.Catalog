@@ -30,6 +30,47 @@ internal class MovieConfig : IEntityTypeConfiguration<Movie>
             .IsRequired()
             .HasMaxLength(1000);
 
+        builder.Property(movie => movie.OriginalTitle)
+            .IsRequired()
+            .HasMaxLength(500)
+            .HasDefaultValue(string.Empty);
+
+        builder.Property(movie => movie.OriginalLanguage)
+            .IsRequired()
+            .HasMaxLength(20)
+            .HasDefaultValue(string.Empty);
+
+        builder.Property(movie => movie.ReleaseDate)
+            .IsRequired()
+            .HasMaxLength(20)
+            .HasDefaultValue(string.Empty);
+
+        builder.Property(movie => movie.Popularity)
+            .IsRequired()
+            .HasDefaultValue(0d);
+
+        builder.Property(movie => movie.VoteCount)
+            .IsRequired()
+            .HasDefaultValue(0);
+
+        builder.Property(movie => movie.Adult)
+            .IsRequired()
+            .HasDefaultValue(false);
+
+        builder.Property(movie => movie.Video)
+            .IsRequired()
+            .HasDefaultValue(false);
+
+        builder.Property(movie => movie.PosterPath)
+            .IsRequired()
+            .HasMaxLength(1000)
+            .HasDefaultValue(string.Empty);
+
+        builder.Property(movie => movie.BackdropPath)
+            .IsRequired()
+            .HasMaxLength(1000)
+            .HasDefaultValue(string.Empty);
+
         builder.Property(movie => movie.Format)
             .HasConversion<string>()
             .HasMaxLength(20)
@@ -51,6 +92,7 @@ internal class MovieConfig : IEntityTypeConfiguration<Movie>
         builder.HasIndex(movie => movie.Format);
         builder.HasIndex(movie => movie.Availability);
         builder.HasIndex(movie => movie.IsFeatured);
+        builder.HasIndex(movie => movie.Popularity);
 
         builder.HasMany(movie => movie.MovieGenres)
             .WithOne(movieGenre => movieGenre.Movie)

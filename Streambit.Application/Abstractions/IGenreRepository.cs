@@ -9,6 +9,7 @@ public interface IGenreRepository
     Task<bool> AllExistAsync(IReadOnlyCollection<int> ids, CancellationToken cancellationToken = default);
     Task<bool> ExternalIdInUseAsync(int sourceId, string externalId, int genreId, CancellationToken cancellationToken = default);
     Task<Genre?> GetByExternalIdAsync(int sourceId, string externalId, CancellationToken cancellationToken = default);
+    Task<IReadOnlyDictionary<string, int>> GetIdsByExternalIdAsync(int sourceId, CancellationToken cancellationToken = default);
     Task<Genre?> GetByNameAsync(string name, CancellationToken cancellationToken = default);
     Task AddAsync(Genre genre, CancellationToken cancellationToken = default);
     void Remove(Genre genre);

@@ -5,8 +5,24 @@ namespace Streambit.Api.Registrars;
 
 public class MvcRegitrar : IWebApplicationBuilderRegistrar
 {
+    public const string WebPolicy = "Web";
+
     public void RegisterServices(WebApplicationBuilder builder)
     {
+        var origins = builder.Configuration.GetSection("Cors:Origins").Get<string[]>() ?? [];
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(WebPolicy, policy =>
+            {
+                if (origins.Length == 0)
+                    return;
+
+                policy.WithOrigins(origins)
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
+
         builder.Services.AddScoped<ApiExceptionFilter>();
         builder.Services.AddControllers(options =>
         {

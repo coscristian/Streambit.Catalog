@@ -1,6 +1,7 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Streambit.Application.Genres;
+using Streambit.Application.Sync;
 using Streambit.Contracts.Genres;
 
 namespace Streambit.Api.Controllers.V1;
@@ -35,7 +36,7 @@ public class GenresController : ControllerBase
     [HttpPost(ApiRoutes.Genres.Sync)]
     public async Task<ActionResult<GenreSyncResult>> Sync(CancellationToken cancellationToken)
     {
-        return Ok(await _sync.SyncAsync(cancellationToken));
+        return Ok(await _sync.SyncAsync(SyncTrigger.Manual, cancellationToken));
     }
 
     [HttpPost]

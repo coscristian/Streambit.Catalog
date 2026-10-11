@@ -65,7 +65,47 @@ public class PersonService : IPersonService
         {
             Id = person.Id,
             Name = person.Name,
-            PhotoUrl = person.PhotoUrl
+            PhotoUrl = person.PhotoUrl,
+            ProfilePath = person.ProfilePath,
+            Adult = person.Adult,
+            Gender = person.Gender,
+            KnownForDepartment = person.KnownForDepartment,
+            Popularity = person.Popularity,
+            ExternalIds = person.PersonSources
+                .OrderBy(link => link.Source?.Name)
+                .Select(link => new PersonExternalIdResponse
+                {
+                    SourceId = link.SourceId,
+                    SourceName = link.Source?.Name ?? string.Empty,
+                    ExternalId = link.ExternalId
+                })
+                .ToList(),
+            KnownFor = person.KnownFor
+                .OrderBy(work => work.SortOrder)
+                .Select(work => new PersonKnownForResponse
+                {
+                    Id = work.Id,
+                    SortOrder = work.SortOrder,
+                    ExternalId = work.ExternalId,
+                    MediaType = work.MediaType,
+                    Adult = work.Adult,
+                    BackdropPath = work.BackdropPath,
+                    PosterPath = work.PosterPath,
+                    GenreIds = work.GenreIds.ToList(),
+                    OriginalLanguage = work.OriginalLanguage,
+                    OriginalTitle = work.OriginalTitle,
+                    OriginalName = work.OriginalName,
+                    Overview = work.Overview,
+                    ReleaseDate = work.ReleaseDate,
+                    FirstAirDate = work.FirstAirDate,
+                    Title = work.Title,
+                    Name = work.Name,
+                    Video = work.Video,
+                    VoteAverage = work.VoteAverage,
+                    VoteCount = work.VoteCount,
+                    OriginCountries = work.OriginCountries.ToList()
+                })
+                .ToList()
         };
     }
 }

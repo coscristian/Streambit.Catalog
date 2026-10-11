@@ -15,8 +15,25 @@ public class MovieResponse
     public string Format { get; set; } = string.Empty;
     public string Availability { get; set; } = string.Empty;
     public bool IsFeatured { get; set; }
+    public string OriginalTitle { get; set; } = string.Empty;
+    public string OriginalLanguage { get; set; } = string.Empty;
+    public string ReleaseDate { get; set; } = string.Empty;
+    public double Popularity { get; set; }
+    public int VoteCount { get; set; }
+    public bool Adult { get; set; }
+    public bool Video { get; set; }
+    public string PosterPath { get; set; } = string.Empty;
+    public string BackdropPath { get; set; } = string.Empty;
+    public List<MovieExternalIdResponse> ExternalIds { get; set; } = [];
     public List<GenreResponse> Genres { get; set; } = [];
     public List<MovieCreditResponse> Credits { get; set; } = [];
+}
+
+public class MovieExternalIdResponse
+{
+    public int SourceId { get; set; }
+    public string SourceName { get; set; } = string.Empty;
+    public string ExternalId { get; set; } = string.Empty;
 }
 
 public class MovieCreditResponse

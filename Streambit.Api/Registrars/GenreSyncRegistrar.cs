@@ -1,5 +1,7 @@
 using Streambit.Api.Tmdb;
 using Streambit.Application.Genres;
+using Streambit.Application.Movies;
+using Streambit.Application.People;
 
 namespace Streambit.Api.Registrars;
 
@@ -16,7 +18,22 @@ public class GenreSyncRegistrar : IWebApplicationBuilderRegistrar
             client.BaseAddress = new Uri(options.BaseUrl.TrimEnd('/') + "/");
         });
 
+        builder.Services.AddHttpClient<ITmdbPersonClient, TmdbPersonClient>((serviceProvider, client) =>
+        {
+            var options = serviceProvider.GetRequiredService<Microsoft.Extensions.Options.IOptions<TmdbOptions>>().Value;
+            client.BaseAddress = new Uri(options.BaseUrl.TrimEnd('/') + "/");
+        });
+
+        builder.Services.AddHttpClient<ITmdbMovieClient, TmdbMovieClient>((serviceProvider, client) =>
+        {
+            var options = serviceProvider.GetRequiredService<Microsoft.Extensions.Options.IOptions<TmdbOptions>>().Value;
+            client.BaseAddress = new Uri(options.BaseUrl.TrimEnd('/') + "/");
+        });
+
+        builder.Services.AddScoped<SyncRequestLogger>();
         builder.Services.AddScoped<IGenreSyncService, GenreSyncService>();
+        builder.Services.AddScoped<IPersonSyncService, PersonSyncService>();
+        builder.Services.AddScoped<IMovieSyncService, MovieSyncService>();
         builder.Services.AddHostedService<GenreSyncHostedService>();
     }
 }

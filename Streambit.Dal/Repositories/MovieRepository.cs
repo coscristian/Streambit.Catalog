@@ -23,14 +23,35 @@ public class MovieRepository : IMovieRepository
         return movie;
     }
 
-    public async Task<IReadOnlyList<Movie>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<(IReadOnlyList<Movie> Items, int TotalResults)> GetPageAsync(
+        int page,
+        int pageSize,
+        CancellationToken cancellationToken = default)
     {
-        return await _context.Movies
+        var total = await _context.Movies.CountAsync(cancellationToken);
+        var items = await _context.Movies
+            .AsNoTracking()
+            .AsSplitQuery()
             .Include(movie => movie.MovieGenres)
                 .ThenInclude(link => link.Genre)
             .Include(movie => movie.Credits)
                 .ThenInclude(credit => credit.Person)
+            .Include(movie => movie.MovieSources)
+                .ThenInclude(link => link.Source)
             .OrderBy(movie => movie.Title)
+            .ThenBy(movie => movie.Id)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+
+        return (items, total);
+    }
+
+    public async Task<IReadOnlyList<string>> GetExternalIdsAsync(int sourceId, CancellationToken cancellationToken = default)
+    {
+        return await _context.MovieSources
+            .Where(link => link.SourceId == sourceId)
+            .Select(link => link.ExternalId)
             .ToListAsync(cancellationToken);
     }
 
@@ -49,6 +70,11 @@ public class MovieRepository : IMovieRepository
         return _context.SaveChangesAsync(cancellationToken);
     }
 
+    public void ClearChangeTracker()
+    {
+        _context.ChangeTracker.Clear();
+    }
+
     private async Task LoadDetailsAsync(Movie movie, CancellationToken cancellationToken)
     {
         await _context.Entry(movie)
@@ -61,6 +87,12 @@ public class MovieRepository : IMovieRepository
             .Collection(item => item.Credits)
             .Query()
             .Include(credit => credit.Person)
+            .LoadAsync(cancellationToken);
+
+        await _context.Entry(movie)
+            .Collection(item => item.MovieSources)
+            .Query()
+            .Include(link => link.Source)
             .LoadAsync(cancellationToken);
     }
 }
