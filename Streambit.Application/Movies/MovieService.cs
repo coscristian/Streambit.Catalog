@@ -1,7 +1,9 @@
 using Streambit.Application.Abstractions;
 using Streambit.Contracts.Genres;
 using Streambit.Contracts.Movies;
+using Streambit.Contracts.Titles;
 using Streambit.Domain.Aggregates.MovieAggregate;
+using CatalogValues = Streambit.Application.CatalogValues;
 
 namespace Streambit.Application.Movies;
 
@@ -19,24 +21,35 @@ public class MovieService : IMovieService
         _genres = genres;
     }
 
-    public async Task<MoviePageResponse> GetPageAsync(int page, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<TitlePageResponse> GetPageAsync(TitleListRequest request, CancellationToken cancellationToken = default)
     {
-        if (page < 1)
-            throw new ArgumentException("Page must be at least 1.", nameof(page));
+        if (request.Page < 1)
+            throw new ArgumentException("Page must be at least 1.", nameof(request.Page));
 
-        if (pageSize < 1 || pageSize > MaxPageSize)
-            throw new ArgumentException($"Page size must be between 1 and {MaxPageSize}.", nameof(pageSize));
+        if (request.PageSize < 1 || request.PageSize > MaxPageSize)
+            throw new ArgumentException($"Page size must be between 1 and {MaxPageSize}.", nameof(request.PageSize));
 
-        var (movies, total) = await _movies.GetPageAsync(page, pageSize, cancellationToken);
-        var totalPages = total == 0 ? 0 : (int)Math.Ceiling(total / (double)pageSize);
+        var parsedFormat = CatalogValues.ParseListFormat(request.Format);
 
-        return new MoviePageResponse
+        var genreId = request.GenreId is > 0 ? request.GenreId : null;
+
+        var (movies, total) = await _movies.GetPageAsync(
+            parsedFormat,
+            genreId,
+            request.Page,
+            request.PageSize,
+            request.OrderBy,
+            request.SortAscending,
+            cancellationToken);
+        var totalPages = total == 0 ? 0 : (int)Math.Ceiling(total / (double)request.PageSize);
+
+        return new TitlePageResponse
         {
-            Page = page,
-            PageSize = pageSize,
+            Page = request.Page,
+            PageSize = request.PageSize,
             TotalResults = total,
             TotalPages = totalPages,
-            Results = movies.Select(Map).ToList()
+            Results = movies.Select(MapListItem).ToList()
         };
     }
 
@@ -129,6 +142,24 @@ public class MovieService : IMovieService
 
         foreach (var genreId in genreIds.Except(current))
             movie.AddGenre(genreId);
+    }
+
+    private static TitleListItemResponse MapListItem(Movie movie)
+    {
+        return new TitleListItemResponse
+        {
+            Id = movie.Id,
+            Title = movie.Title,
+            Year = movie.Year,
+            Rating = movie.Rating,
+            PosterUrl = movie.PosterUrl,
+            Availability = movie.Availability.ToString(),
+            Genres = movie.MovieGenres
+                .Where(link => link.Genre is not null)
+                .Select(link => link.Genre.Name)
+                .OrderBy(name => name)
+                .ToList()
+        };
     }
 
     internal static MovieResponse Map(Movie movie)

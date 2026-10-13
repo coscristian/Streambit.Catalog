@@ -63,8 +63,8 @@ public class Movie
         if (string.IsNullOrWhiteSpace(backdropUrl))
             throw new ArgumentException("Backdrop URL is required.", nameof(backdropUrl));
 
-        if (!Enum.IsDefined(format))
-            throw new ArgumentException("Format is not valid.", nameof(format));
+        if (!Enum.IsDefined(format) || format == ContentFormat.All)
+            throw new ArgumentException("Format must be Movie or Series.", nameof(format));
 
         if (!Enum.IsDefined(availability))
             throw new ArgumentException("Availability is not valid.", nameof(availability));
@@ -250,8 +250,8 @@ public class Movie
 
     public void UpdateFormat(ContentFormat format)
     {
-        if (!Enum.IsDefined(format))
-            throw new ArgumentException("Format is not valid.", nameof(format));
+        if (!Enum.IsDefined(format) || format == ContentFormat.All)
+            throw new ArgumentException("Format must be Movie or Series.", nameof(format));
 
         if (format == Format)
             return;

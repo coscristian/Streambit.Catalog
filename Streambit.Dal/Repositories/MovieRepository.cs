@@ -24,27 +24,50 @@ public class MovieRepository : IMovieRepository
     }
 
     public async Task<(IReadOnlyList<Movie> Items, int TotalResults)> GetPageAsync(
+        ContentFormat? format,
+        int? genreId,
         int page,
         int pageSize,
+        string orderBy,
+        bool sortAscending,
         CancellationToken cancellationToken = default)
     {
-        var total = await _context.Movies.CountAsync(cancellationToken);
-        var items = await _context.Movies
+        var filtered = _context.Movies.AsQueryable();
+        if (format is not null && format != ContentFormat.All)
+            filtered = filtered.Where(movie => movie.Format == format);
+
+        if (genreId is > 0)
+            filtered = filtered.Where(movie => movie.MovieGenres.Any(link => link.GenreId == genreId));
+
+        filtered = ApplyOrderBy(filtered, orderBy, sortAscending);
+
+        var total = await filtered.CountAsync(cancellationToken);
+        var items = await filtered
             .AsNoTracking()
-            .AsSplitQuery()
             .Include(movie => movie.MovieGenres)
                 .ThenInclude(link => link.Genre)
-            .Include(movie => movie.Credits)
-                .ThenInclude(credit => credit.Person)
-            .Include(movie => movie.MovieSources)
-                .ThenInclude(link => link.Source)
-            .OrderBy(movie => movie.Title)
-            .ThenBy(movie => movie.Id)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync(cancellationToken);
 
         return (items, total);
+    }
+
+    private IQueryable<Movie> ApplyOrderBy(IQueryable<Movie> query, string orderBy, bool sortAscending)
+    {
+        switch (orderBy.ToLowerInvariant())
+        {
+            case "id":
+                return sortAscending ? query.OrderBy(movie => movie.Id) : query.OrderByDescending(movie => movie.Id);
+            case "title":
+                return sortAscending ? query.OrderBy(movie => movie.Title) : query.OrderByDescending(movie => movie.Title);
+            case "releaseDate":
+                return sortAscending ? query.OrderBy(movie => movie.ReleaseDate) : query.OrderByDescending(movie => movie.ReleaseDate);
+            case "popularity":
+                return sortAscending ? query.OrderBy(movie => movie.Popularity) : query.OrderByDescending(movie => movie.Popularity);
+            default:
+                return query.OrderBy(movie => movie.Id);
+        }
     }
 
     public async Task<IReadOnlyList<string>> GetExternalIdsAsync(int sourceId, CancellationToken cancellationToken = default)
