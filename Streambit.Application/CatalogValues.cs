@@ -4,9 +4,29 @@ namespace Streambit.Application;
 
 internal static class CatalogValues
 {
+    public static ContentFormat? ParseListFormat(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return ContentFormat.All;
+
+        var normalized = NormalizeFormat(value);
+        if (normalized.Equals(nameof(ContentFormat.All), StringComparison.OrdinalIgnoreCase))
+            return ContentFormat.All;
+
+        if (Enum.TryParse<ContentFormat>(normalized, true, out var format)
+            && Enum.IsDefined(format)
+            && format != ContentFormat.All)
+            return format;
+
+        throw new ArgumentException("Format must be All, Movie, or Series.");
+    }
+
     public static ContentFormat ParseFormat(string? value)
     {
-        if (Enum.TryParse<ContentFormat>(value, true, out var format) && Enum.IsDefined(format))
+        var normalized = NormalizeFormat(value);
+        if (Enum.TryParse<ContentFormat>(normalized, true, out var format)
+            && Enum.IsDefined(format)
+            && format != ContentFormat.All)
             return format;
 
         throw new ArgumentException("Format must be Movie or Series.");
@@ -33,5 +53,18 @@ internal static class CatalogValues
             return role;
 
         throw new ArgumentException("Role must be Lead, Supporting, or Director.");
+    }
+
+    private static string NormalizeFormat(string? value)
+    {
+        var normalized = value?.Trim() ?? string.Empty;
+        if (normalized.Equals("Movies", StringComparison.OrdinalIgnoreCase))
+            return nameof(ContentFormat.Movie);
+
+        if (normalized.Equals("Serie", StringComparison.OrdinalIgnoreCase)
+            || normalized.Equals("Series", StringComparison.OrdinalIgnoreCase))
+            return nameof(ContentFormat.Series);
+
+        return normalized;
     }
 }

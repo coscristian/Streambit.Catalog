@@ -4,7 +4,7 @@ public class ApiRoutes
 {
     public const string BaseRoute = "api/v{version:apiVersion}/[controller]";
 
-    public class Movies
+    public class Titles
     {
         public const string GetById = "{id}";
         public const string Sync = "sync";
